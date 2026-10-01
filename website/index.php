@@ -1,0 +1,665 @@
+<?php
+require_once '../config/db.php';
+
+$configs = $pdo->query("SELECT chave, valor FROM configuracoes")->fetchAll(PDO::FETCH_KEY_PAIR);
+
+$atletas = $pdo->query("SELECT * FROM atletas WHERE ativo = 1 ORDER BY id DESC")->fetchAll();
+
+$galeria = $pdo->query("SELECT * FROM galeria WHERE ativo = 1 ORDER BY criado_em DESC")->fetchAll();
+
+$trufas = $pdo->query("SELECT * FROM trufas WHERE ativo = 1 ORDER BY id ASC")->fetchAll();
+
+$redes_sociais = $pdo->query("SELECT * FROM redes_sociais WHERE ativo = 1 ORDER BY ordem ASC")->fetchAll();
+?>
+
+
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dojo Ventura — Centro de Treinamento de Karatê</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../assets/CSS/style.css" />
+  </head>
+  <body>
+    <!-- Header Oculto (Aparece no Scroll) -->
+    <header id="main-header" class="header">
+      <div class="header-container container">
+        <a href="#" class="logo">
+          <span class="logo-box">DV</span>
+          <div class="logo-text">
+            <strong>DOJO VENTURA</strong>
+            <span>Regente Feijó/SP</span>
+          </div>
+        </a>
+        <nav class="nav-links">
+          <a href="#vaquinha">Vaquinha</a>
+          <a href="#atletas">Atletas</a>
+          <a href="#galeria">Galeria</a>
+          <a href="#aulas">Aulas</a>
+          <a href="#apoiar">Trufas</a>
+        </nav>
+        <a href="#contato" class="btn-primary btn-header">Fale Conosco</a>
+      </div>
+    </header>
+
+    <section id="hero" class="hero reveal">
+      <div class="hero-overlay"></div>
+      <div class="hero-content container">
+        <div class="hero-text-block modern-card glass-panel">
+          <span class="subtitle">Projeto Social & Alto Rendimento</span>
+          <h1>
+            Nossos atletas vencem no tatame. Para competir pelo mundo,
+            precisamos de você.
+          </h1>
+          <p>
+            O Dojo Ventura forma cidadãos e atletas de elite no interior de São
+            Paulo. Ajude a custear deslocamento, alimentação e inscrições nos
+            torneios oficiais.
+          </p>
+
+          <div class="hero-buttons">
+            <a href="#vaquinha" class="btn-primary btn-large"
+              >Ver Meta da Vaquinha</a
+            >
+            <a href="#aulas" class="btn-outline btn-large"
+              >Ver Horários de Aulas</a
+            >
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Progresso da Vaquinha -->
+    <section id="vaquinha" class="section dark-bg reveal">
+      <div class="container grid-2-uneven align-items-center">
+        <div class="section-header align-left">
+          <span class="highlight">Acompanhamento em Tempo Real</span>
+          <h2>Vaquinha: Rumo ao Brasileiro</h2>
+          <p>
+            Acompanhe nossa meta de arrecadação para levar nossos atletas ao
+            torneio nacional. Cada doação, por menor que seja, aproxima nossa
+            equipe do pódio.
+          </p>
+        </div>
+
+        <div class="progress-card modern-card">
+          <div class="progress-info">
+            <h3>Progresso da Arrecadação</h3>
+            <span class="progress-percentage">65%</span>
+          </div>
+          <div class="progress-bar-container">
+            <div class="progress-bar-fill" style="width: 65%"></div>
+          </div>
+          <div class="progress-stats">
+            <div>
+              <span class="label">Arrecadado</span>
+              <strong>R$ 3.250,00</strong>
+            </div>
+            <div class="text-right">
+              <span class="label">Meta Total</span>
+              <strong>R$ 5.000,00</strong>
+            </div>
+          </div>
+
+          <div class="pix-action-box">
+            <p>Copie nossa chave PIX e faça sua doação:</p>
+            <div class="pix-action">
+              <input
+                type="text"
+                id="pixKey"
+                readonly
+                value="dojoventura@email.com.br"
+                class="pix-input"
+              />
+              <button onclick="copiarPix()" class="btn-primary">
+                Copiar PIX
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <main>
+      <section id="pilares" class="section reveal">
+        <div class="container">
+          <div class="section-header">
+            <span class="highlight">Nossa Filosofia</span>
+            <h2>Os 3 Pilares do Dojo Ventura</h2>
+          </div>
+          <div class="grid-3">
+            <div class="card modern-card">
+              <div class="card-icon">01</div>
+              <h3>A Escola & Formação</h3>
+              <p>
+                O karatê como ferramenta de cidadania. Exigimos dedicação
+                escolar, respeito aos mais velhos e autocontrole inabalável.
+              </p>
+            </div>
+            <div class="card modern-card">
+              <div class="card-icon">02</div>
+              <h3>Alto Rendimento</h3>
+              <p>
+                Treinamento técnico rigoroso com foco olímpico. Preparamos
+                guerreiros para as competições estaduais e nacionais.
+              </p>
+            </div>
+            <div class="card modern-card">
+              <div class="card-icon">03</div>
+              <h3>Ação Comunitária</h3>
+              <p>
+                Democratizando o esporte para famílias de baixa renda de Regente
+                Feijó, garantindo que nenhum talento seja desperdiçado.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Atletas Carrossel (Atualizado com mais cards) -->
+      <section id="atletas" class="section dark-bg reveal">
+        <div class="container">
+          <div class="section-header">
+            <span class="highlight">Quadro de Honra</span>
+            <h2>Atletas de Alto Desempenho</h2>
+            <p>
+              Deslize para conhecer os competidores que levam o nome da nossa
+              cidade aos pódios.
+            </p>
+          </div>
+
+          <div class="carousel-container">
+            <button class="carousel-btn prev-btn" id="prevBtn">&#10094;</button>
+            <div class="carousel-track" id="carouselTrack">
+              <!-- Atleta 1 -->
+              <div class="atleta-card modern-card">
+                <div
+                  class="atleta-img"
+                  style="
+                    background-image: url(&quot;https://images.unsplash.com/photo-1555597673-b21d5c935865?auto=format&fit=crop&w=600&q=80&quot;);
+                  "
+                ></div>
+                <div class="atleta-info">
+                  <span class="badge badge-gold">Seleção Brasileira</span>
+                  <h3>Ssinesio</h3>
+                  <p>Categoria Kumite Sênior</p>
+                  <button class="btn-outline open-modal" data-atleta="Ssinesio">
+                    Ver Detalhes
+                  </button>
+                </div>
+              </div>
+              <!-- Atleta 2 -->
+              <div class="atleta-card modern-card">
+                <div
+                  class="atleta-img"
+                  style="
+                    background-image: url(&quot;https://images.unsplash.com/photo-1541534741688-6078c6bfb5c5?auto=format&fit=crop&w=600&q=80&quot;);
+                  "
+                ></div>
+                <div class="atleta-info">
+                  <span class="badge">Equipe Paulista</span>
+                  <h3>Lucas Silva</h3>
+                  <p>Categoria Cadete</p>
+                  <button
+                    class="btn-outline open-modal"
+                    data-atleta="Lucas Silva"
+                  >
+                    Ver Detalhes
+                  </button>
+                </div>
+              </div>
+              <!-- Atleta 3 -->
+              <div class="atleta-card modern-card">
+                <div
+                  class="atleta-img"
+                  style="
+                    background-image: url(&quot;https://images.unsplash.com/photo-1574680096145-d05b474e2155?auto=format&fit=crop&w=600&q=80&quot;);
+                  "
+                ></div>
+                <div class="atleta-info">
+                  <span class="badge">Promessa Base</span>
+                  <h3>Amanda Mendes</h3>
+                  <p>Categoria Infantil Sub-14</p>
+                  <button
+                    class="btn-outline open-modal"
+                    data-atleta="Amanda Mendes"
+                  >
+                    Ver Detalhes
+                  </button>
+                </div>
+              </div>
+              <!-- Atleta 4 -->
+              <div class="atleta-card modern-card">
+                <div
+                  class="atleta-img"
+                  style="
+                    background-image: url(&quot;https://images.unsplash.com/photo-1599058917212-d750089bc07e?auto=format&fit=crop&w=600&q=80&quot;);
+                    filter: grayscale(20%);
+                  "
+                ></div>
+                <div class="atleta-info">
+                  <span class="badge badge-gold">Especialista Kata</span>
+                  <h3>Roberto Gomes</h3>
+                  <p>Categoria Kata Sênior</p>
+                  <button
+                    class="btn-outline open-modal"
+                    data-atleta="Roberto Gomes"
+                  >
+                    Ver Detalhes
+                  </button>
+                </div>
+              </div>
+              <!-- Atleta 5 -->
+              <div class="atleta-card modern-card">
+                <div
+                  class="atleta-img"
+                  style="
+                    background-image: url(&quot;https://images.unsplash.com/photo-1526509867162-5b0c0d1b4b33?auto=format&fit=crop&w=600&q=80&quot;);
+                  "
+                ></div>
+                <div class="atleta-info">
+                  <span class="badge">Feminino Elite</span>
+                  <h3>Julia Castro</h3>
+                  <p>Categoria Kumite Sub-21</p>
+                  <button
+                    class="btn-outline open-modal"
+                    data-atleta="Julia Castro"
+                  >
+                    Ver Detalhes
+                  </button>
+                </div>
+              </div>
+              <!-- Atleta 6 -->
+              <div class="atleta-card modern-card">
+                <div
+                  class="atleta-img"
+                  style="
+                    background-image: url(&quot;https://images.unsplash.com/photo-1595078475328-1ab05d41660c?auto=format&fit=crop&w=600&q=80&quot;);
+                  "
+                ></div>
+                <div class="atleta-info">
+                  <span class="badge">Destaque Regional</span>
+                  <h3>Marcos Vinicius</h3>
+                  <p>Categoria Júnior</p>
+                  <button
+                    class="btn-outline open-modal"
+                    data-atleta="Marcos Vinicius"
+                  >
+                    Ver Detalhes
+                  </button>
+                </div>
+              </div>
+            </div>
+            <button class="carousel-btn next-btn" id="nextBtn">&#10095;</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- GALERIA DE FOTOS (Expandida) -->
+      <section id="galeria" class="section reveal">
+        <div class="container">
+          <div class="section-header">
+            <span class="highlight">Nossa História em Imagens</span>
+            <h2>Momentos de Glória</h2>
+            <p>
+              Nossa equipe em ação: treinos, competições e conquistas pelo
+              Brasil.
+            </p>
+          </div>
+
+          <div class="galeria-grid">
+            <div
+              class="galeria-item modern-card"
+              style="
+                background-image: url(&quot;https://images.unsplash.com/photo-1555597673-b21d5c935865?auto=format&fit=crop&w=800&q=80&quot;);
+              "
+            >
+              <div class="galeria-overlay">
+                <span>Campeonato Paulista 2023</span>
+              </div>
+            </div>
+            <div
+              class="galeria-item modern-card"
+              style="
+                background-image: url(&quot;https://images.unsplash.com/photo-1541534741688-6078c6bfb5c5?auto=format&fit=crop&w=800&q=80&quot;);
+              "
+            >
+              <div class="galeria-overlay"><span>Treino de Kumite</span></div>
+            </div>
+            <div
+              class="galeria-item modern-card"
+              style="
+                background-image: url(&quot;https://images.unsplash.com/photo-1574680096145-d05b474e2155?auto=format&fit=crop&w=800&q=80&quot;);
+              "
+            >
+              <div class="galeria-overlay">
+                <span>Apresentação de Kata</span>
+              </div>
+            </div>
+            <div
+              class="galeria-item modern-card"
+              style="
+                background-image: url(&quot;https://images.unsplash.com/photo-1599058917212-d750089bc07e?auto=format&fit=crop&w=800&q=80&quot;);
+              "
+            >
+              <div class="galeria-overlay">
+                <span>Equipe Base - Regente Feijó</span>
+              </div>
+            </div>
+            <div
+              class="galeria-item modern-card"
+              style="
+                background-image: url(&quot;https://images.unsplash.com/photo-1548843288-e9f0d11f62b0?auto=format&fit=crop&w=800&q=80&quot;);
+                filter: grayscale(50%);
+              "
+            >
+              <div class="galeria-overlay"><span>Entrega de Faixas</span></div>
+            </div>
+            <div
+              class="galeria-item modern-card"
+              style="
+                background-image: url(&quot;https://images.unsplash.com/photo-1621303837174-89787a7d4729?auto=format&fit=crop&w=800&q=80&quot;);
+                filter: grayscale(20%);
+              "
+            >
+              <div class="galeria-overlay">
+                <span>Finais Open Nacional</span>
+              </div>
+            </div>
+            <div
+              class="galeria-item modern-card"
+              style="
+                background-image: url(&quot;https://images.unsplash.com/photo-1526509867162-5b0c0d1b4b33?auto=format&fit=crop&w=800&q=80&quot;);
+              "
+            >
+              <div class="galeria-overlay">
+                <span>Copa São Paulo 2024</span>
+              </div>
+            </div>
+            <div
+              class="galeria-item modern-card"
+              style="
+                background-image: url(&quot;https://images.unsplash.com/photo-1517836357463-d25dfeac3438?auto=format&fit=crop&w=800&q=80&quot;);
+                filter: grayscale(30%);
+              "
+            >
+              <div class="galeria-overlay">
+                <span>Treinamento Físico Extremo</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- HORÁRIOS DAS AULAS -->
+      <section id="aulas" class="section dark-bg reveal border-top-red">
+        <div class="container">
+          <div class="section-header">
+            <span class="highlight">Venha Treinar Conosco</span>
+            <h2>Cronograma de Aulas</h2>
+            <p>
+              Turmas separadas por idade e nível de graduação. Agende uma aula
+              experimental gratuita.
+            </p>
+          </div>
+
+          <div class="grid-4">
+            <div class="aula-card modern-card">
+              <h3>Turma Kids (5 a 9 anos)</h3>
+              <hr />
+              <ul>
+                <li><strong>Dias:</strong> Terças e Quintas</li>
+                <li><strong>Horário:</strong> 18:30 às 19:30</li>
+                <li><strong>Foco:</strong> Coordenação e disciplina.</li>
+              </ul>
+            </div>
+            <div class="aula-card modern-card">
+              <h3>Infanto-Juvenil (10 a 14)</h3>
+              <hr />
+              <ul>
+                <li><strong>Dias:</strong> Segundas e Quartas</li>
+                <li><strong>Horário:</strong> 18:30 às 19:45</li>
+                <li><strong>Foco:</strong> Fundamentos (Kihon e Kata).</li>
+              </ul>
+            </div>
+            <div class="aula-card modern-card">
+              <h3>Jovens e Adultos</h3>
+              <hr />
+              <ul>
+                <li><strong>Dias:</strong> Segundas e Quartas</li>
+                <li><strong>Horário:</strong> 20:00 às 21:30</li>
+                <li>
+                  <strong>Foco:</strong> Defesa pessoal e condicionamento.
+                </li>
+              </ul>
+            </div>
+            <div class="aula-card modern-card card-destaque">
+              <h3>Equipe de Competição</h3>
+              <hr />
+              <ul>
+                <li><strong>Dias:</strong> Terç, Qui e Sáb</li>
+                <li><strong>Horário:</strong> 19:30 às 21:30</li>
+                <li><strong>Foco:</strong> Alto rendimento e tática.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- TRUFAS -->
+      <section id="apoiar" class="section reveal">
+        <div class="container grid-2-uneven align-items-center">
+          <div class="section-header align-left">
+            <span class="highlight">Iniciativa dos Alunos</span>
+            <h2>Trufas Solidárias</h2>
+            <p>
+              Para custear as viagens, nossos próprios atletas produzem e vendem
+              trufas artesanais. Compre e ajude a equipe a chegar mais longe!
+            </p>
+          </div>
+
+          <div class="grid-2-form">
+            <div class="trufa-card modern-card">
+              <div
+                class="trufa-img"
+                style="
+                  background-image: url(&quot;https://images.unsplash.com/photo-1548843288-e9f0d11f62b0?auto=format&fit=crop&w=400&q=80&quot;);
+                "
+              ></div>
+              <div class="trufa-info">
+                <h3>Brigadeiro / Beijinho</h3>
+                <span class="price">R$ 5,00</span>
+                <button
+                  class="btn-whatsapp"
+                  onclick="pedirTrufa('Tradicionais')"
+                >
+                  Pedir no WhatsApp
+                </button>
+              </div>
+            </div>
+            <div class="trufa-card modern-card">
+              <div
+                class="trufa-img"
+                style="
+                  background-image: url(&quot;https://images.unsplash.com/photo-1621303837174-89787a7d4729?auto=format&fit=crop&w=400&q=80&quot;);
+                "
+              ></div>
+              <div class="trufa-info">
+                <h3>Maracujá / Limão</h3>
+                <span class="price">R$ 5,00</span>
+                <button class="btn-whatsapp" onclick="pedirTrufa('Frutas')">
+                  Pedir no WhatsApp
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Contato -->
+      <section id="contato" class="section dark-bg reveal">
+        <div class="container grid-2-form align-items-center">
+          <div class="contato-info">
+            <div class="section-header align-left">
+              <span class="highlight">Visite ou Fale Conosco</span>
+              <h2>Nossos Contatos</h2>
+            </div>
+
+            <ul class="contato-lista">
+              <li>
+                <div class="icon-box pulse-anim">
+                  <svg
+                    viewBox="0 0 24 24"
+                    width="24"
+                    height="24"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    fill="none"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <path
+                      d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"
+                    ></path>
+                    <circle cx="12" cy="10" r="3"></circle>
+                  </svg>
+                </div>
+                <span>Rua Principal, 123 - Centro, Regente Feijó - SP</span>
+              </li>
+              <li>
+                <div class="icon-box float-anim">
+                  <svg
+                    viewBox="0 0 24 24"
+                    width="24"
+                    height="24"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    fill="none"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <path
+                      d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"
+                    ></path>
+                    <polyline points="22,6 12,13 2,6"></polyline>
+                  </svg>
+                </div>
+                <span>contato@dojoventura.com.br</span>
+              </li>
+              <li>
+                <div class="icon-box wiggle-anim">
+                  <svg
+                    viewBox="0 0 24 24"
+                    width="24"
+                    height="24"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    fill="none"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <path
+                      d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"
+                    ></path>
+                  </svg>
+                </div>
+                <span>(18) 99999-9999</span>
+              </li>
+            </ul>
+
+            <div class="social-destaque">
+              <h3>Siga o Dojo Ventura</h3>
+              <div class="social-links-row">
+                <a href="#" class="social-btn-large instagram">Instagram</a>
+                <a href="#" class="social-btn-large facebook">Facebook</a>
+                <a href="#" class="social-btn-large youtube">YouTube</a>
+              </div>
+            </div>
+          </div>
+
+          <form class="contato-form modern-card">
+            <h3 style="margin-bottom: 20px; font-size: 1.5rem">
+              Envie sua Mensagem
+            </h3>
+            <input type="text" placeholder="Seu Nome Completo *" required />
+            <input type="tel" placeholder="WhatsApp com DDD *" required />
+            <select required>
+              <option value="">Selecione o assunto</option>
+              <option value="apoiar">Quero ser apoiador / Patrocínio</option>
+              <option value="aulas">Matrículas e aulas</option>
+            </select>
+            <textarea rows="4" placeholder="Sua Mensagem *" required></textarea>
+            <button type="button" class="btn-primary btn-large">
+              Enviar Mensagem
+            </button>
+          </form>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <div class="container footer-grid">
+        <div class="footer-col brand-col">
+          <a href="#" class="logo">
+            <span class="logo-box">DV</span>
+            <div class="logo-text">
+              <strong>DOJO VENTURA</strong>
+              <span>Projeto Social</span>
+            </div>
+          </a>
+          <p class="footer-desc">
+            Transformando a vida de crianças e jovens através da disciplina do
+            Karatê. Do interior de SP para os pódios do mundo.
+          </p>
+        </div>
+
+        <div class="footer-col">
+          <h3>Links Úteis</h3>
+          <ul>
+            <li><a href="#vaquinha">Apoiar Viagens</a></li>
+            <li><a href="#atletas">Equipe de Atletas</a></li>
+            <li><a href="#galeria">Galeria de Fotos</a></li>
+            <li><a href="#aulas">Horários de Aulas</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h3>Redes Sociais</h3>
+          <div class="social-links">
+            <a href="#" class="social-link-text">Instagram ↗</a>
+            <a href="#" class="social-link-text">Facebook ↗</a>
+            <a href="#" class="social-link-text">YouTube ↗</a>
+            <a href="#" class="social-link-text">TikTok ↗</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer-bottom container">
+        <p>© 2026 Dojo Ventura. Todos os direitos reservados.</p>
+      </div>
+    </footer>
+
+    <!-- MODAL DO ATLETA (Oculto por padrão) -->
+    <div id="atletaModal" class="modal">
+      <div class="modal-content modern-card">
+        <span class="close-modal">&times;</span>
+        <h2 id="modalNomeAtleta">Nome do Atleta</h2>
+        <p id="modalCatAtleta" class="modal-categoria">Categoria</p>
+
+        <h3 class="modal-subtitle">Histórico de Competições</h3>
+        <ul id="modalListaCompeticoes" class="modal-lista">
+          <!-- O JS preencherá isso -->
+        </ul>
+      </div>
+    </div>
+
+    <script src="../assets/JS/scripit.js"></script>
+  </body>
+</html>
